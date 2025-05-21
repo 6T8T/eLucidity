@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeoMessages | Personal Messaging</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    body {
+    }
+  </style>
+</head>
+  <body>
+
+    <!-- Background Layers -->
+    <div id="spaceBackground"></div>
+    <div id="nebulaFog"></div>
+    <canvas id="starfield"></canvas>
+    <div id="hexGridOverlay"></div>
+    <div id="particle-container"></div>
+    <div class="particle-cursor" id="cursor"></div>
+
+
+
+    <!-- Main HUD -->
+    <div class="app-container">
+
+      <!-- Status Bar (visible on all screens) -->
+      <div class="status-bar">
+        <div>6:01</div>
+        <div class="status-icons">
+          <i class="fas fa-signal"></i>
+          <i class="fas fa-wifi"></i>
+          <i class="fas fa-battery-three-quarters"></i>
+        </div>
+      </div>
+      <!-- End of Status Bar -->
+      <!------------------------>
+      <!------------------------>
+      <!-- Home Panel -->
+      <div id="panel-home" class="hud-panel active">
+        <div class="home-nav-left"></div>
+        <div class="home-nav-right"></div>
+        <div class="home-pages">
+          <div class="home-page active">
+            <!-- App Launcher -->
+            <div class="app-launcher">
+
+
+          <!-- App Icons -->
+          <!----------------------------->
+          <!----------------------------->
+          <!-- Add more APP ICONS here -->
+
+          <!-- Weather App Icon -->
+          <div class="app-icon" data-app data-target="panel-weather">
+            <div class="close-button" onclick="removeApp(this)">×</div>
+            <i class="fas fa-sun"></i>
+            <span>Weather</span>
+          </div>
+
+          <!-- Messages App Icon -->
+          <div class="app-icon" data-app data-target="panel-messages">
+            <div class="close-button" onclick="removeApp(this)">×</div>
+            <i class="fas fa-comment-dots"></i>
+            <span>Messages</span>
+          </div>
+
+          <!-- Settings App Icon -->
+          <div class="app-icon" data-app data-target="panel-settings">
+            <div class="close-button" onclick="removeApp(this)">×</div>
+            <i class="fas fa-gear"></i>
+            <span>Settings</span>
+          </div>
+
+          <!-- Music App Icon -->
+          <div class="app-icon" data-app data-target="panel-music">
+            <div class="close-button" onclick="removeApp(this)">×</div>
+            <i class="fas fa-music"></i>
+            <span>Music</span>
+          </div>
+
+          <!-- Spiral App Icon -->
+          <div class="app-icon" data-app data-target="panel-spiral">
+            <div class="close-button" onclick="removeApp(this)">×</div>
+            <i class="fas fa-infinity"></i>
+            <span>Spiral</span>
+          </div>
+
+          </div>
+          </div>
+          <div class="home-page">
+            <!-- Calendar Widget -->
+            <div class="calendar-widget">
+              <div class="calendar-header">
+                <span class="calendar-month"></span>
+                <span class="calendar-year"></span>
+              </div>
+              <div class="calendar-body">
+                <div class="calendar-weekdays"></div>
+                <div class="calendar-days"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Page Dots -->
+        <div class="page-dots">
+          <div class="dot active"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+      <div id="panel-messages" class="hud-panel">
+
+
+  <!-- Threads Page -->
+  <div id="messages-threads" class="messages-panel">
+    <div id="threads-wrapper">
+    <div class="favorite-contacts">
+      <div class="favorite-contact">
+        <img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" class="contact-avatar" />
+        <div class="contact-name">Kai</div>
+      </div>
+      <div class="favorite-contact">
+        <img src="https://via.placeholder.com/100x100?text=A" class="contact-avatar" />
+        <div class="contact-name">Astra</div>
+      </div>
+      <div class="favorite-contact">
+        <img src="https://via.placeholder.com/100x100?text=S" class="contact-avatar" />
+        <div class="contact-name">Sol</div>
+      </div>
+    </div>
+
+    <div class="chat-list" id="thread-list">
+    </div>
+    </div>
+  </div>
+
+  <!-- Full Chat View -->
+  <div id="messages-chat" class="messages-panel hidden">
+    <div id="chat-visible-section" class="hidden">
+      <div class="full-thread-header">
+        <span class="back-arrow"><i class="fas fa-chevron-left"></i></span>
+        <div class="contact-info">
+          <img src="" class="contact-avatar" />
+          <div class="contact-name"></div>
+          <div class="contact-status">ONLINE</div>
+        </div>
+        <div class="chat-options">CALL</div>
+      </div>
+
+      <div class="chat-input">
+        <div class="attachment-button">
+          <i class="fas fa-paperclip"></i>
+        </div>
+        <input type="text" placeholder="+ Type your message..." />
+      </div>
+    </div>
+
+    <div class="chat-body">
+      <!-- Dynamic message bubbles go here -->
+    </div>
+  </div>
+</div>
+
+       <!-- Settings Panel -->
+      <div id="panel-settings" class="hud-panel">
+        <div class="app-screen active" data-screen="settings-home">
+          <div class="settings-page"> ... </div>
+        </div>
+      </div>
+
+      <!-- Weather Panel -->
+        <div id="panel-weather" class="hud-panel">
+          <div class="app-screen active" data-screen="weather-home">
+            <div class="weather-container">
+              <div class="location-info">
+                <i class="fas fa-location-dot"></i>
+                <span>New York City</span>
+              </div>
+              <div class="current-weather">
+                <div class="temperature">72°</div>
+                <div class="weather-type">Feels like: 75°</div>
+                <div class="high-low">H:76° L:65°</div>
+              </div>
+              <div class="weather-detail-grid">
+                <div class="weather-detail">
+                  <i class="fas fa-wind"></i>
+                  <span>12 mph</span>
+                  <small>Wind</small>
+                </div>
+                <div class="weather-detail">
+                  <i class="fas fa-droplet"></i>
+                  <span>45%</span>
+                  <small>Humidity</small>
+                </div>
+                <div class="weather-detail">
+                  <i class="fas fa-gauge-simple-high"></i>
+                  <span>75°</span>
+                  <small>Feels Like</small>
+                </div>
+                <div class="weather-detail">
+                  <i class="fas fa-sun"></i>
+                  <span>5</span>
+                  <small>UV Index</small>
+                </div>
+                <div class="weather-detail">
+                  <i class="fas fa-wind"></i>
+                  <span>8 mph</span>
+                  <small>Wind</small>
+                </div>
+                <div class="weather-detail">
+                  <i class="fas fa-compass"></i>
+                  <span>NW</span>
+                  <small>Direction</small>
+                </div>
+                <div class="weather-detail">
+                  <i class="fas fa-eye"></i>
+                  <span>10 mi</span>
+                  <small>Visibility</small>
+                </div>
+              </div>
+              <div class="hourly-forecast">
+                <div class="forecast-hour">
+                  <span>Now</span>
+                  <i class="fas fa-cloud-sun"></i>
+                  <span>72°</span>
+                </div>
+                <div class="forecast-hour">
+                  <span>2PM</span>
+                  <i class="fas fa-sun"></i>
+                  <span>75°</span>
+                </div>
+                <div class="forecast-hour">
+                  <span>3PM</span>
+                  <i class="fas fa-cloud"></i>
+                  <span>74°</span>
+                </div>
+                <div class="forecast-hour">
+                  <span>4PM</span>
+                  <i class="fas fa-cloud-sun"></i>
+                  <span>73°</span>
+                </div>
+                <div class="forecast-hour">
+                  <span>5PM</span>
+                  <i class="fas fa-cloud"></i>
+                  <span>71°</span>
+                </div>
+                <div class="forecast-hour">
+                  <span>6PM</span>
+                  <i class="fas fa-cloud-sun"></i>
+                  <span>70°</span>
+                </div>
+              </div>
+              <div class="daily-forecast">
+                <div class="forecast-day">
+                  <span>Today</span>
+                  <i class="fas fa-cloud-sun"></i>
+                  <span>72°/65°</span>
+                </div>
+                <div class="forecast-day">
+                  <span>Thu</span>
+                  <i class="fas fa-sun"></i>
+                  <span>75°/63°</span>
+                </div>
+                <div class="forecast-day">
+                  <span>Fri</span>
+                  <i class="fas fa-cloud"></i>
+                  <span>70°/62°</span>
+                </div>
+              </div>
+              <div class="air-quality">
+                <i class="fas fa-wind"></i>
+                <span>Air Quality</span>
+                <div class="aqi">32 - Good</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Music Panel -->
+        <div id="panel-music" class="hud-panel">
+          <div class="app-screen active" data-screen="music-home">
+            <div class="music-container">
+              <div class="now-playing">
+                <img src="https://via.placeholder.com/300x300" alt="Album Art" class="album-art">
+                <div class="track-info">
+                  <div class="track-title">No Track Playing</div>
+                  <div class="artist-name">Select a track to begin</div>
+                </div>
+                <div class="playback-controls">
+                  <i class="fas fa-backward-step"></i>
+                  <i class="fas fa-play"></i>
+                  <i class="fas fa-forward-step"></i>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress"></div>
+                </div>
+                <div class="time-info">
+                  <span>0:00</span>
+                  <span>0:00</span>
+                </div>
+              </div>
+              <div class="library-section">
+                <div class="section-header-container">
+                  <div class="section-header library-title">Library</div>
+                  <button class="import-music-btn">
+                    <i class="fas fa-plus"></i>
+                    Import
+                  </button>
+                </div>
+                <div class="import-dialog hidden">
+                  <input type="text" placeholder="Enter YouTube URL" class="youtube-url-input">
+                  <button class="convert-btn">Convert & Add</button>
+                </div>
+                <div class="music-list">
+                  <div class="music-item">
+                    <img src="https://via.placeholder.com/60x60" alt="Album 1">
+                    <div class="song-info">
+                      <div class="song-title">Neon Dreams</div>
+                      <div class="song-artist">Cyber Echo</div>
+                    </div>
+                  </div>
+                  <div class="music-item">
+                    <img src="https://via.placeholder.com/60x60" alt="Album 2">
+                    <div class="song-info">
+                      <div class="song-title">Digital Sunset</div>
+                      <div class="song-artist">Virtual Pulse</div>
+                    </div>
+                  </div>
+                  <div class="music-item">
+                    <img src="https://via.placeholder.com/60x60" alt="Album 3">
+                    <div class="song-info">
+                      <div class="song-title">Quantum Groove</div>
+                      <div class="song-artist">Binary Beats</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+       <!-- Spiral Panel -->
+    <div id="panel-spiral" class="hud-panel">
+      <div class="spiral-nav">
+        <div class="nav-item active" data-screen="spiral-home">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </div>
+        <div class="nav-item" data-screen="spiral-friends">
+          <i class="fas fa-users"></i>
+          <span>Friends</span>
+        </div>
+        <div class="nav-item" data-screen="spiral-create">
+          <i class="fas fa-plus"></i>
+          <span>Create</span>
+        </div>
+        <div class="nav-item" data-screen="spiral-inbox">
+          <i class="fas fa-inbox"></i>
+          <span>Inbox</span>
+        </div>
+        <div class="nav-item" data-screen="spiral-profile">
+          <i class="fas fa-user"></i>
+          <span>Profile</span>
+        </div>
+      </div>
+
+      <!-- Content Screens -->
+      <div class="spiral-screen active" id="spiral-home">
+        <div class="video-feed">
+          <div class="video-container">
+            <div class="video-placeholder">
+              <i class="fas fa-play"></i>
+            </div>
+            <div class="video-actions">
+              <div class="action-btn"><i class="fas fa-heart"></i><span>123K</span></div>
+              <div class="action-btn"><i class="fas fa-comment"></i><span>1.2K</span></div>
+              <div class="action-btn"><i class="fas fa-bookmark"></i><span>Save</span></div>
+              <div class="action-btn"><i class="fas fa-share"></i><span>Share</span></div>
+            </div>
+            <div class="video-info">
+              <span class="username">@creator</span>
+              <p class="description">Check out this amazing content! #spiral #trending</p>
+            </div>
+          </div>
+
+          <div class="video-container">
+            <div class="video-placeholder">
+              <i class="fas fa-play"></i>
+            </div>
+            <div class="video-actions">
+              <div class="action-btn"><i class="fas fa-heart"></i><span>89K</span></div>
+              <div class="action-btn"><i class="fas fa-comment"></i><span>956</span></div>
+              <div class="action-btn"><i class="fas fa-bookmark"></i><span>Save</span></div>
+              <div class="action-btn"><i class="fas fa-share"></i><span>Share</span></div>
+            </div>
+            <div class="video-info">
+              <span class="username">@viralcreator</span>
+              <p class="description">Another amazing video! #viral #trending</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spiral-screen" id="spiral-friends">
+        <div class="friends-bubbles">
+          <div class="friend-bubble">
+            <img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" alt="Friend">
+            <span>@neo</span>
+          </div>
+          <div class="friend-bubble">
+            <img src="https://via.placeholder.com/100x100?text=A" alt="Friend">
+            <span>@astra</span>
+          </div>
+          <div class="friend-bubble">
+            <img src="https://via.placeholder.com/100x100?text=S" alt="Friend">
+            <span>@sol</span>
+          </div>
+          <div class="friend-bubble add-friend">
+            <i class="fas fa-plus"></i>
+            <span>Add</span>
+          </div>
+        </div>
+        <div class="friends-list">
+          <div class="friend-item">
+            <img class="friend-avatar" src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" alt="Friend">
+            <div class="friend-info">
+              <span class="friend-name">Neo Kai</span>
+              <span class="friend-username">@neokai</span>
+            </div>
+            <button class="follow-btn">Follow</button>
+          </div>
+          <div class="friend-item">
+            <img class="friend-avatar" src="https://via.placeholder.com/100x100?text=A" alt="Friend">
+            <div class="friend-info">
+              <span class="friend-name">Astra Nova</span>
+              <span class="friend-username">@astranova</span>
+            </div>
+            <button class="follow-btn following">Following</button>
+          </div>
+          <div class="friend-item">
+            <img class="friend-avatar" src="https://via.placeholder.com/100x100?text=S" alt="Friend">
+            <div class="friend-info">
+              <span class="friend-name">Sol Light</span>
+              <span class="friend-username">@sollight</span>
+            </div>
+            <button class="follow-btn">Follow</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="spiral-screen" id="spiral-create">
+        <div class="create-header">
+          <h2>Create</h2>
+        </div>
+        <div class="create-options">
+          <div class="create-option">
+            <i class="fas fa-video"></i>
+            <span>Upload Video</span>
+          </div>
+          <div class="create-option">
+            <i class="fas fa-camera"></i>
+            <span>Record</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="spiral-screen" id="spiral-inbox">
+        <div class="inbox-header">
+          <h2>Inbox</h2>
+        </div>
+        <div class="live-bubbles">
+          <div class="live-bubble">
+            <div class="live-indicator"></div>
+            <img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" alt="Live">
+            <span>Neo Live</span>
+          </div>
+          <div class="live-bubble">
+            <div class="live-indicator"></div>
+            <img src="https://via.placeholder.com/100x100?text=A" alt="Live">
+            <span>Astra Live</span>
+          </div>
+          <div class="live-bubble">
+            <div class="live-indicator"></div>
+            <img src="https://via.placeholder.com/100x100?text=S" alt="Live">
+            <span>Sol Live</span>
+          </div>
+        </div>
+        <div class="inbox-threads">
+          <div class="thread-item activity-thread">
+            <img class="thread-avatar" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAQESURBVGiB7ZlbiFVVGMd/a+09M3PmzIwO3kYdvIxaaY8V1ENhF7CHiKQgKoqih4J6qKeE6iUfyqjX6EJQQvQQGQSBUGBBhVFEIEVeZryP4wXvOjNnZu+1eniYfc7MOTNz9hmniPmDxf7W+r7v/69vrb332msLk5jEJELjvZV1+cxPU+xBbgUV0VjdtuX8uGa0oS6XF4HQ+t1vBafGPQA4UNlNQIApivtIPO8PEeY6wmm/E85KlQIBPzXrjVP/1wD+iWq4GKVooB6oBPJs+jDQC3SjbFMfzp8Yz+BtEJQNBVhW1UbWtygPBEWYoR6zVJmJo9MFnQnSBNQBAVAA+kD6gDPAMYQDIfKLb5zPZXFOCK1dkPvlvD8oAMZ3FqJsQqnF0QnkQ1HyKIcRtqH6kdTq8aPjFYQBbazL5S2sB7kH5wFHF6LVqX+D4G5V3VRUX5SqEFHlLpQXLbqgXDfAEeB14KOGTPZMuQm3oSGT7UZY5+AhlC0qvJIKOKnCl0A38JRBpjoYJY5BqYZ5XFFEtB/n9oCeAbbHlP2o7lVhr7PuqHO0otoCshlHZTx0AQ4FZRVwvSirUXaAHAM2AL8KHEDoCMMgpR6QR4GlCNvx9RmQIyq6Q4XTqC5BuQN4DvNvAJWWDOBB4BFx9mMVdoKcRFiFcktKtC0VxHaE1YL6h1X1Ax/6gJtAn9Qg7gd6bSQrgGcrYkGHoCcohlLIDtTfBtKpyu0gn4fGPyLQLcBaVGpR1gIbQX8D7gZZ4xz3CxQFtiiBdIbO6GugDxh0sVBQlKWC+6aYCHo8mR7QQZRtKH0om1SZFQTBj8AXwDxV9xboXJTHRdgG8ifQBjwnyIMOlgO/Ay1hguQEp8RkA0R7UfmyeHJQlbdQGkEGnZe+Lci5kyI6B2WRc7IfOAj0OOF7YBnoE8DKMBkB4BXgdeABhNkoLwJfJeIcYQKH0KDTKeJcXpUeVb5BaQFmgDwvyssi/IXyDsJShM2ovoDIp0nzAhCKaAvIRsS/H5iL8AJKv1NdVDpokICXpHo+yB2qLEJ0p4juA1YDU4E3UdaAnAIaQd4WkV5VjgGrEPlIVVeHCQgBkOaKaDPwuQDOuRtQlgOnQb5V1a+BRSJyFhUf1T4RvgR5M0xG0KGeIyIbgIw4VwdyL8JilPUo34nIXqAe5KQqHs5vBN6JRBqg8Tw9KGedcy0gR0X0R5DPgONAg4juBZoBD+QQyl6QIxE4wSAAOYvIe4I0OeQwQhPIFuBUcYM+BHyKaptzciTE+Oi7ENBbvLOLgBqQaUAFcB7oB46DdKL0jGdwk5jE1cE/PMyxvpYyG24AAAAASUVORK5CYII=" alt="Activity">
+            <div class="thread-content">
+              <span class="thread-title">All activity</span>
+              <span class="thread-preview">Like, comment and mention notifications</span>
+            </div>
+            <span class="thread-time">2 new</span>
+          </div>
+
+          <div class="messages-section">
+            <div class="section-header">Messages</div>
+            <div class="thread-item">
+              <img class="thread-avatar" src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" alt="Neo">
+              <div class="thread-content">
+                <span class="thread-title">Neo Kai</span>
+                <span class="thread-preview">Let's meet at the docks</span>
+              </div>
+              <span class="thread-time">2m</span>
+            </div>
+
+            <div class="thread-item">
+              <img class="thread-avatar" src="https://via.placeholder.com/100x100?text=A" alt="Astra">
+              <div class="thread-content">
+                <span class="thread-title">Astra Nova</span>
+                <span class="thread-preview">Did you see the new update?</span>
+              </div>
+              <span class="thread-time">1h</span>
+            </div>
+
+            <div class="thread-item">
+              <img class="thread-avatar" src="https://via.placeholder.com/100x100?text=S" alt="Sol">
+              <div class="thread-content">
+                <span class="thread-title">Sol Light</span>
+                <span class="thread-preview">Thanks for the help!</span>
+              </div>
+              <span class="thread-time">3h</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spiral-screen" id="spiral-activity">
+        <div class="activity-header">
+          <div class="back-to-inbox" onclick="backToInbox()">
+            <i class="fas fa-chevron-left"></i>
+          </div>
+          <h2>Activity</h2>
+        </div>
+        <div class="activity-tabs">
+          <div class="tab active" data-tab="all">All</div>
+          <div class="tab" data-tab="likes">Likes</div>
+          <div class="tab" data-tab="comments">Comments</div>
+          <div class="tab" data-tab="mentions">Mentions</div>
+        </div>
+        <div class="activity-feed">
+          <!-- Sample activities -->
+          <div class="activity-item">
+            <img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" alt="User">
+            <div class="activity-content">
+              <span class="username">@neo</span> liked your video
+              <span class="time">2h ago</span>
+            </div>
+            <div class="activity-preview">
+              <img src="https://via.placeholder.com/50" alt="Video thumbnail">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spiral-screen" id="spiral-messages">
+        <div class="messages-header">
+          <div class="back-to-inbox" onclick="backToInbox()">
+            <i class="fas fa-chevron-left"></i>
+          </div>
+          <div class="contact-info">
+            <img class="contact-avatar" src="" alt="Contact">
+            <span class="contact-name"></span>
+          </div>
+        </div>
+        <div class="messages-body"></div>
+        <div class="message-input-container">
+          <input type="text" placeholder="Message..." />
+          <button><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+
+      <div class="spiral-screen" id="spiral-profile">
+        <div class="profile-content">
+          <div class="profile-header">
+            <div class="profile-top">
+              <div class="profile-info">
+                <h2 class="real-name">John Smith</h2>
+                <span class="pronouns">he/him</span>
+              </div>
+              <div class="profile-actions">
+                <span class="profile-views"><i class="fas fa-eye"></i> 1.2K</span>
+                <button class="settings-btn"><i class="fas fa-gear"></i></button>
+              </div>
+            </div>
+
+            <div class="profile-user-info">
+              <img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" alt="Profile" class="profile-avatar">
+              <h3>@username</h3>
+            </div>
+
+            <div class="profile-stats">
+              <div class="stat-item">
+                <span class="stat-number">120</span>
+                <span class="stat-label">Following</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">850</span>
+                <span class="stat-label">Followers</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">2.3K</span>
+                <span class="stat-label">Likes</span>
+              </div>
+            </div>
+
+            <div class="profile-buttons">
+              <button class="edit-profile-btn">Edit profile</button>
+              <button class="share-profile-btn"><i class="fas fa-share"></i></button>
+              <button class="find-friends-btn"><i class="fas fa-user-plus"></i></button>
+            </div>
+
+            <div class="profile-bio">
+              <p>✨ Creating digital art and sharing moments</p>
+            </div>
+
+            <div class="profile-tabs">
+            <div class="tab active" data-tab="videos">
+              <i class="fas fa-film"></i>
+            </div>
+            <div class="tab" data-tab="private">
+              <i class="fas fa-lock"></i>
+            </div>
+            <div class="tab" data-tab="reposts">
+              <i class="fas fa-retweet"></i>
+            </div>
+            <div class="tab" data-tab="saved">
+              <i class="fas fa-bookmark"></i>
+            </div>
+            <div class="tab" data-tab="liked">
+              <i class="fas fa-heart"></i>
+            </div>
+          </div>
+
+          <div class="profile-grid" id="videos-grid">
+            <!-- Video thumbnails will go here -->
+            <div class="profile-video-item">
+              <img src="https://via.placeholder.com/150" alt="Video thumbnail">
+              <span class="views">1.2K</span>
+            </div>
+            <div class="profile-video-item">
+              <img src="https://via.placeholder.com/150" alt="Video thumbnail">
+              <span class="views">3.4K</span>
+            </div>
+            <div class="profile-video-item">
+              <img src="https://via.placeholder.com/150" alt="Video thumbnail">
+              <span class="views">892</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Profile Modal -->
+        <div class="edit-profile-modal hidden">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>Edit Profile</h3>
+              <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+              <div class="edit-avatar">
+                <img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" alt="Profile">
+                <button class="change-photo-btn">Change photo</button>
+              </div>
+              <div class="edit-field">
+                <label>Username</label>
+                <input type="text" value="@username">
+              </div>
+              <div class="edit-field">
+                <label>Name</label>
+                <input type="text" value="User Name">
+              </div>
+              <div class="edit-field">
+                <label>Bio</label>
+                <textarea>✨ Creating digital art and sharing moments</textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="save-profile-btn">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
+
+
+      <!-- App Switcher -->
+      <div id="app-switcher" class="hidden">
+        <div class="switcher-scroll">
+          <!-- Cards are injected here by updateAppSwitcher() -->
+        </div>
+      </div>
+      <!-- End <of App Switcher -->
+
+      <!-- Done button moved here -->
+      <div id="done-button" class="hidden" onclick="toggleEditMode(false)">Done</div>
+
+      <!-- Close Bar -->
+      <div id="close-bar" class="hidden"
+           onmousedown="handleCloseBarPressStart(event)" 
+           onmouseup="handleCloseBarPressEnd(event)" 
+           ontouchstart="handleCloseBarPressStart(event)" 
+           ontouchend="handleCloseBarPressEnd(event)">
+        <div class="close-bar-handle"></div>
+      <!-- End of app panels -->
+
+    <!-- Scripts -->
+
+
+    <script src="js/starfield.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/main.js"></script> <!-- Where your long-press/edit functions go -->
+  </body>
+
+</html>
